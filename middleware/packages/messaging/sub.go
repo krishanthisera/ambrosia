@@ -5,16 +5,26 @@ import (
 	"fmt"
 
 	"github.com/gomodule/redigo/redis"
+	"github.com/krishanthisera/ambrosia.git/packages/controllers"
 	"github.com/krishanthisera/ambrosia.git/packages/models"
 )
 
+type TopicInput struct {
+	Id          int    `json:"id" gorm:"primary_key"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Creation    string `json:"creation"`
+	LastEdit    string `json:"lastedit"`
+	Stories     string `json:"stories"`
+}
+
 func RedSub(channel, conString string) {
-	conn, conErr := redis.Dial("tcp", "localhost:6379")
+	conn, conErr := redis.Dial("tcp", conString)
 	if conErr != nil {
 		panic("Redis Dial")
 	}
 	psc := redis.PubSubConn{Conn: conn}
-	psc.Subscribe("topics")
+	psc.Subscribe(channel)
 	for {
 		switch v := psc.Receive().(type) {
 		case redis.Message:
@@ -23,7 +33,7 @@ func RedSub(channel, conString string) {
 			if err != nil {
 				panic("Unmarshal")
 			}
-			DbPush(topic)
+			controllers.CreateTopic(&topic)
 		case redis.Subscription:
 			fmt.Printf("%s: %s %d\n", v.Channel, v.Kind, v.Count)
 		case error:
@@ -31,16 +41,4 @@ func RedSub(channel, conString string) {
 		}
 	}
 	defer conn.Close()
-}
-
-func DbPush(topic models.Topic) {
-	dbString := new(models.PsqlConnect)
-	dbString.Dbname = "topics"
-	dbString.Port = 5432
-	dbString.Password = "123"
-	dbString.User = "user"
-	dbString.Host = "localhost"
-
-	models.DbInsert(models.DbConnect(dbString), topic)
-
 }

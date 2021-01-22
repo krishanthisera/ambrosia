@@ -33,7 +33,7 @@ func CreateTopic(c *gin.Context) {
 
 	//Create Messaging Channel
 	channel := models.RedisConnect{ConString: "localhost:6379",
-		Channel: "topics",
+		Channel: "topics-1",
 	}
 
 	// Publish the message
