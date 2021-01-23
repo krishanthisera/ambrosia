@@ -8,7 +8,7 @@ COPY . .
 
 #Download the deps and build go
 RUN go mod download
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o /go/bin/front .
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o /go/bin/middle .
 
 
 # Stage 02
@@ -22,6 +22,6 @@ ENV AMB_DB_USER=user
 ENV AMB_RED_HOST=localhost:6379
 ENV AMB_DB_HOST=localhost
 ENV AMB_DB_PORT=5432
-COPY --from=build /go/bin/front /go/bin/front
+COPY --from=build /go/bin/middle /go/bin/middle
 
-ENTRYPOINT [ "/go/bin/front" ]
+ENTRYPOINT [ "/go/bin/middle" ]

@@ -1,0 +1,26 @@
+version: '3'
+services: 
+  redis:
+    image: redis
+    ports: 
+      - 6379:6379
+  db:
+    image: postgres
+    env_file: 
+      - db.env
+    ports:
+      - 5432:5432
+    volumes:
+       - ./init.sql:/docker-entrypoint-initdb.d/init.sql 
+  front:
+    build: ./frontend
+    env_file: 
+      - apps.env
+    ports: 
+      - 8090:8080
+  middle:
+    build: ./middleware
+    env_file: 
+      - apps.env
+# echo apps.env >> .gitignore
+# echo db.env >> .gitignore
