@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -31,12 +32,7 @@ func CreateTopic(c *gin.Context) {
 		Stories:     input.Stories,
 	}
 
-	//Create Messaging Channel
-	channel := models.RedisConnect{ConString: "localhost:6379",
-		Channel: "topics-1",
-	}
-
 	// Publish the message
-	messaging.RedPub(topic, channel.ConString, channel.Channel)
+	messaging.RedPub(topic, os.Getenv("AMB_RED_HOST"), os.Getenv("AMB_RED_CHAN"))
 	c.JSON(http.StatusOK, gin.H{"data": topic})
 }
