@@ -1,6 +1,3 @@
-CREATE USER 'user';
-CREATE DATABASE 'topics';
-GRANT ALL PRIVILEGES ON DATABASE 'topics' TO 'user';
 
 CREATE TABLE stories(
     id              serial      NOT NULL,  
