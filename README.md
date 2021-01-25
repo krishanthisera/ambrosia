@@ -14,6 +14,6 @@ A Distributed program for learning micro-services.
 - export AMB_DB_PASS="123"
 - export AMB_DB_TBL="stories"
 
-Doing PR Testing
+Doing PR Testing..
 
 [infra]: https://github.com/krishanthisera/ambrosia/blob/main/ambrosia.jpg
