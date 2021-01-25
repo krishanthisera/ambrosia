@@ -18,9 +18,13 @@ services:
       - apps.env
     ports: 
       - 8090:8080
+    depends_on:
+      - db
   middle:
     build: ./middleware
     env_file: 
       - apps.env
+    depends_on:
+      - db
 # echo apps.env >> .gitignore
 # echo db.env >> .gitignore
